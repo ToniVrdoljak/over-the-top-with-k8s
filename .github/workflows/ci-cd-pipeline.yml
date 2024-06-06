@@ -66,12 +66,12 @@ jobs:
 
       # This step is not needed since we use Docker Hub. If we use GCR or something similar we need to uncomment this step
       # This step configures Docker to authenticate with Google Container Registry (GCR) or Artifact Registry
-      #- name: Auth
+      #- name: Set up Docker
       #  run: gcloud --quiet auth configure-docker
 
       # This step retrieves the GKE cluster credentials and sets up kubectl to work with retreived credentials
       # allowing it to interact with the specified cluster
-      - name: Get Credentials
+      - name: Set up kubectl
         uses: google-github-actions/get-gke-credentials@v2
         with:
           cluster_name: ${{ vars.CLUSTER_NAME }}
