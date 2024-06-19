@@ -44,6 +44,17 @@ That is why a special helm chart is used for development environment.
 
 ##  Production/QA k8s environment setup
 
-### Setting up domain
+### Deploying the app to PROD/QA
 
-Purchasing and setting up a domain is required for setting up HTTPS.
+To deploy the app to production or qa environment make a pull request to master or develop branches respectively and merge it.
+The CD pipeline will then deploy the app automatically.
+
+### Setting up a domain
+
+Domain purchase and setup is necessary for the HTTPS/TLS to work properly.
+
+After a deploy to PROD/QA connect to k8s cluster where the app was deployed and look up the ingress-nginx IP address (use kubectl or dashboard if it exists). Use the ingress-nginx IP address to set up the domain.
+
+Here is an example of how to do it in Sqarespace (it should be similar for any other provider):
+
+![Domain setup](./domain_setup.png)
