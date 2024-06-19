@@ -77,8 +77,66 @@ jobs:
           cluster_name: ${{ vars.CLUSTER_NAME }}
           location: ${{ vars.LOCATION }}
 
+      - name: Install helm
+        uses: azure/setup-helm@v4.2.0
+        id: install
+
+      - name: Set up infrastructure
+        run: ./scripts/set_up_infra.sh
+
       - name: Deploy
-        run: python -u ./scripts/deploy.py
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          SHA: $(git rev-parse HEAD)
+        run: |
+          helm upgrade --install over-the-top-with-k8s helm_charts/over-the-top-with-k8s/ --atomic \
+            --set tag=$(git rev-parse HEAD) \
+            --set overTheTopDatabase.auth.username=${{ secrets.PSQL_USER }} \
+            --set overTheTopDatabase.auth.password=${{ secrets.PSQL_PASSWORD }} \
+            --values helm_charts/over-the-top-with-k8s/values/${{ vars.VALUE_PATH }}
+
+  deploy_to_qa:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
+    environment: QA
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      # This step sets authentication creds for Google Cloud SDK (gcloud CLI) using a service account key
+      - name: Set Service Key
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GKE_SA_KEY }}
+
+      # This step authenticates with GCP using the creds from previous step and configures the gcloud CLI to use a specific GCP project
+      - name: Set Project
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ vars.PROJECT_ID }}
+
+      # This step is not needed since we use Docker Hub. If we use GCR or something similar we need to uncomment this step
+      # This step configures Docker to authenticate with Google Container Registry (GCR) or Artifact Registry
+      #- name: Set up Docker
+      #  run: gcloud --quiet auth configure-docker
+
+      # This step retrieves the GKE cluster credentials and sets up kubectl to work with retreived credentials
+      # allowing it to interact with the specified cluster
+      - name: Set up kubectl
+        uses: google-github-actions/get-gke-credentials@v2
+        with:
+          cluster_name: ${{ vars.CLUSTER_NAME }}
+          location: ${{ vars.LOCATION }}
+
+      - name: Install helm
+        uses: azure/setup-helm@v4.2.0
+        id: install
+
+      - name: Set up infrastructure
+        run: ./scripts/set_up_infra.sh
+
+      - name: Deploy
+        run: |
+          helm upgrade --install over-the-top-with-k8s helm_charts/over-the-top-with-k8s/ --atomic \
+            --set tag=$(git rev-parse HEAD) \
+            --set overTheTopDatabase.auth.username=${{ secrets.PSQL_USER }} \
+            --set overTheTopDatabase.auth.password=${{ secrets.PSQL_PASSWORD }} \
+            --values helm_charts/over-the-top-with-k8s/values/${{ vars.VALUES_FILE }}

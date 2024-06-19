@@ -1,0 +1,5 @@
+domains:
+  commonName: qa.over-the-top-with-k8s.com
+  hostNames:
+    - qa.over-the-top-with-k8s.com
+    - www.qa.over-the-top-with-k8s.com

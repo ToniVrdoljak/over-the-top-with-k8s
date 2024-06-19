@@ -24,6 +24,7 @@ if __name__ == '__main__':
     print(f"{b_green} Logging into DockerHub... {color_off}")
     subprocess.run(f"""docker login --username {DOCKER_USERNAME} --password {DOCKER_ACCESS_TOKEN}""", shell=True, check=True)
 
+    # we push tag latest so that it can be used for local deployments
     push_image_with_tag_latest_to_repo("client")
     push_image_with_tag_latest_to_repo("worker")
     push_image_with_tag_latest_to_repo("server")

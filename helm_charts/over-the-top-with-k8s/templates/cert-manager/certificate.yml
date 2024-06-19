@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: over-the-top-with-k8s-com-tls
+spec:
+  secretName: over-the-top-with-k8s-com
+  issuerRef:
+    name: letsencrypt
+    kind: ClusterIssuer
+  commonName: {{ .Values.domains.commonName }}
+  dnsNames:
+    {{- toYaml .Values.domains.hostNames | nindent 4 }}
