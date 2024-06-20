@@ -43,11 +43,11 @@ jobs:
         env:
           DOCKER_ACCESS_TOKEN: ${{ secrets.DOCKER_ACCESS_TOKEN }}
 
-  deploy_to_production:
+  deploy:
     runs-on: ubuntu-latest
     needs: build
-    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
-    environment: PROD
+    if: (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.event_name == 'push'
+    environment: ${{ (github.ref == 'refs/heads/master' && 'PROD') || (github.ref == 'refs/heads/develop' && 'QA') }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
@@ -77,8 +77,17 @@ jobs:
           cluster_name: ${{ vars.CLUSTER_NAME }}
           location: ${{ vars.LOCATION }}
 
+      - name: Install helm
+        uses: azure/setup-helm@v4.2.0
+        id: install
+
+      - name: Set up infrastructure
+        run: ./scripts/set_up_infra.sh
+
       - name: Deploy
-        run: python -u ./scripts/deploy.py
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          SHA: $(git rev-parse HEAD)
+        run: |
+          helm upgrade --install over-the-top-with-k8s helm_charts/over-the-top-with-k8s/ --atomic \
+            --set tag=$(git rev-parse HEAD) \
+            --set overTheTopDatabase.auth.username=${{ secrets.PSQL_USER }} \
+            --set overTheTopDatabase.auth.password=${{ secrets.PSQL_PASSWORD }} \
+            --values helm_charts/over-the-top-with-k8s/values/${{ vars.VALUES_FILE }}

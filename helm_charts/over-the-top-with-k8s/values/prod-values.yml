@@ -1,0 +1,5 @@
+domains:
+  commonName: over-the-top-with-k8s.com
+  hostNames:
+    - over-the-top-with-k8s.com
+    - www.over-the-top-with-k8s.com

@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+
+metadata:
+  name: postgres-config-map
+
+data:
+  PGHOST: over-the-top-db
+  PGDATABASE: over_the_top
+  PGPORT: "5432"
