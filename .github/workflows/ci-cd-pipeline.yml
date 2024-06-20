@@ -10,22 +10,11 @@ on:
       - develop
       - master
 
-env:
-  MYENV: ${{ (github.ref == 'refs/heads/master' && 'PROD') || (github.ref == 'refs/heads/develop' && 'QA') }}
-
 jobs:
   test:
     runs-on: ubuntu-latest
-    environment:
-      name: ${{ env.MYENV }}
     steps:
-      - name: test var
-        run: echo ${{ env.MYENV }}
-
-      - name: test env
-        run: echo ${{ github.environment }}
-
-      - name: Checkout Code
+      - name: Checkout Code2
         uses: actions/checkout@v2
 
       - name: Build docker image for testing the client
