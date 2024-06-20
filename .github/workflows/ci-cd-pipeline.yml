@@ -11,22 +11,25 @@ on:
       - master
 
 env:
-  MYENV: ${{ github.ref_name }}
+  MYENV: ${{ (github.ref == 'refs/heads/master' && 'PROD') || (github.ref == 'refs/pull/2/merge' && 'QA') }}
 
 jobs:
   test:
     runs-on: ubuntu-latest
     environment:
-      name: ${{ github.ref_name }}
+      name: ${{ (github.ref == 'refs/heads/master' && 'PROD') || (github.ref == 'refs/pull/2/merge' && 'QA') }}
     steps:
       - name: print branch
         run: echo ${{ github.ref }}
+
+      - name: test var
+        run: echo ${{ env.MYENV }}
 
       - name: test env
         run: echo ${{ github.environment }}
 
       - name: test direct
-        run: echo ${{ (github.ref == 'refs/heads/master' && 'PROD') || (github.ref == 'refs/heads/develop' && 'QA') }}
+        run: echo ${{ (github.ref == 'refs/heads/master' && 'PROD') || (github.ref == 'refs/pull/2/merge' && 'QA') }}
 
       - name: Checkout Code
         uses: actions/checkout@v2
