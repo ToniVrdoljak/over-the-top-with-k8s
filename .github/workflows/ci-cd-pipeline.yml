@@ -33,6 +33,9 @@ jobs:
       - name: test env var
         run: echo ${{ vars.VALUE_PATH }}
 
+      - name: test repo var
+        run: echo ${{ vars.PROJECT_ID }}
+
       - name: Checkout Code
         uses: actions/checkout@v2
 
