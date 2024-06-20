@@ -11,13 +11,13 @@ on:
       - master
 
 env:
-  MYENV: ${{ (github.ref == 'refs/heads/master' && "PROD") || (github.ref == 'refs/pull/2/merge' && "QA") }}
+  MYENV: ${{ (github.ref == 'refs/heads/master' && 'PROD') || (github.ref == 'refs/pull/2/merge' && 'QA') }}
 
 jobs:
   test:
     runs-on: ubuntu-latest
     environment:
-      name: ${{ (github.ref == 'refs/heads/master' && "PROD") || (github.ref == 'refs/pull/2/merge' && "QA") }}
+      name: ${{ (github.ref == 'refs/heads/master' && 'PROD') || (github.ref == 'refs/pull/2/merge' && 'QA') }}
     steps:
       - name: print branch
         run: echo ${{ github.ref }}
@@ -29,7 +29,7 @@ jobs:
         run: echo ${{ github.environment }}
 
       - name: test direct
-        run: echo ${{ (github.ref == 'refs/heads/master' && "PROD") || (github.ref == 'refs/pull/2/merge' && "QA") }}
+        run: echo ${{ (github.ref == 'refs/heads/master' && 'PROD') || (github.ref == 'refs/pull/2/merge' && 'QA') }}
 
       - name: Checkout Code
         uses: actions/checkout@v2
