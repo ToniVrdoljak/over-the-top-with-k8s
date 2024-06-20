@@ -16,7 +16,7 @@ env:
 jobs:
   test:
     runs-on: ubuntu-latest
-    environment: 'PROD'
+    environment: ${{ 'PROD' }}
     steps:
       - name: print branch
         run: echo ${{ github.ref }}
