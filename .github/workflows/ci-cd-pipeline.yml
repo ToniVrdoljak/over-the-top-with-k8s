@@ -19,8 +19,8 @@ jobs:
     environment:
       name: ${{ github.ref_name }}
     steps:
-      - name: test var
-        run: echo ${{ env.MYENV }}
+      - name: print branch
+        run: echo ${{ github.ref }}
 
       - name: test env
         run: echo ${{ github.environment }}
