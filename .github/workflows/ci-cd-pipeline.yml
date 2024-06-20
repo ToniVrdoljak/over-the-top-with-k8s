@@ -16,7 +16,7 @@ env:
 jobs:
   test:
     runs-on: ubuntu-latest
-    environment: QA
+    environment: PROD
     steps:
       - name: print branch
         run: echo ${{ github.ref }}
@@ -31,7 +31,7 @@ jobs:
         run: echo ${{ github.ref_name == 'master' && 'production' || 'QA' }}
 
       - name: test env var
-        run: echo ${{ vars.VALUE_PATH }}
+        run: echo ${{ vars.CLUSTER_NAME }}
 
       - name: test repo var
         run: echo ${{ vars.PROJECT_ID }}
