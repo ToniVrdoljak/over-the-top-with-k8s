@@ -19,6 +19,9 @@ jobs:
     environment:
       name: ${{ (github.ref == 'refs/heads/master' && 'PROD') || (github.ref == 'refs/heads/develop' && 'QA') }}
     steps:
+      - name: test var
+        run: echo ${{ env.MYENV }}
+
       - name: Checkout Code
         uses: actions/checkout@v2
 
