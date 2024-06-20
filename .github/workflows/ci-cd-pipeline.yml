@@ -10,11 +10,14 @@ on:
       - develop
       - master
 
+env:
+  MYENV: ${{ (github.ref == 'refs/heads/master' && 'PROD') || (github.ref == 'refs/heads/develop' && 'QA') }}
+
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code2
+      - name: Checkout Code
         uses: actions/checkout@v2
 
       - name: Build docker image for testing the client
