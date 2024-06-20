@@ -17,7 +17,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     environment:
-      name: ${{ env.MYENV }}
+      name: ${{ (github.ref == 'refs/heads/master' && 'PROD') || (github.ref == 'refs/heads/develop' && 'QA') }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
