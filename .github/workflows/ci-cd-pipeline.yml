@@ -18,6 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: ${{ github.ref_name == 'master' && 'production' || 'QA' }}
+      url: https://over-the-top-with-k8s.com
     steps:
       - name: print branch
         run: echo ${{ github.ref }}
