@@ -11,13 +11,13 @@ on:
       - master
 
 env:
-  MYENV: ${{ (github.ref == 'refs/heads/master' && 'PROD') || (github.ref == 'refs/heads/develop' && 'QA') }}
+  MYENV: ${{ github.ref_name }}
 
 jobs:
   test:
     runs-on: ubuntu-latest
     environment:
-      name: ${{ (github.ref == 'refs/heads/master' && 'PROD') || (github.ref == 'refs/heads/develop' && 'QA') }}
+      name: ${{ github.ref_name }}
     steps:
       - name: test var
         run: echo ${{ env.MYENV }}
