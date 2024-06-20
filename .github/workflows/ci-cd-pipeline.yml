@@ -17,7 +17,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     environment:
-      name: 'QA'
+      name: QA
     steps:
       - name: print branch
         run: echo ${{ github.ref }}
