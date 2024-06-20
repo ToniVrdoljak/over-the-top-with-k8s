@@ -25,6 +25,9 @@ jobs:
       - name: test env
         run: echo ${{ github.environment }}
 
+      - name: test direct
+        run: echo ${{ (github.ref == 'refs/heads/master' && 'PROD') || (github.ref == 'refs/heads/develop' && 'QA') }}
+
       - name: Checkout Code
         uses: actions/checkout@v2
 
